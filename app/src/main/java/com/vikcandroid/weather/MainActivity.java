@@ -7,6 +7,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.TextView;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -14,12 +21,25 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        if (savedInstanceState == null) {
+            getSupportFragmentManager().beginTransaction().add(R.id.container, new PlaceholderFragment()).commit();
+        }
     }
 
     /**
      * A placeholder fragment containing a simple view
      */
     public static class PlaceholderFragment extends Fragment {
+
+        // Adapter
+        ArrayAdapter<String> forecastAdapter;
+
+        // String array to hold dummy forecast
+        String[] forecastArray = {"Today - Sunny - 88/63", "Tomorrow - Foggy - 70/46", "Weds - Cloudy - 72/46",
+                "Thurs - Rainy - 64/51", "Fri - Foggy - 70/46", "Sat - Sunny - 76/68"};
+
+        // List to hold the strings
+        List<String> forecastList = new ArrayList<>(Arrays.asList(forecastArray));
 
         public PlaceholderFragment() {
         }
@@ -46,6 +66,19 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_main, container, false);
+
+            // Now that we have some data, create an {@link ArrayAdapter}
+            // The {@link ArrayAdapter} will take data from a source and use it to populate
+            // the ListView it's attached to.
+            forecastAdapter =
+                    new ArrayAdapter<>(getActivity(),
+                            R.layout.list_item_forecast,
+                            R.id.list_item_forecast_text_view,
+                            forecastList);
+
+            // Get a reference to the ListView and attach this adapter to it.
+            ListView listView = (ListView) rootView.findViewById(R.id.list_view_forecast);
+            listView.setAdapter(forecastAdapter);
             return rootView;
         }
     }
