@@ -71,10 +71,12 @@ public class MainActivity extends AppCompatActivity {
             // The {@link ArrayAdapter} will take data from a source and use it to populate
             // the ListView it's attached to.
             forecastAdapter =
-                    new ArrayAdapter<>(getActivity(),
-                            R.layout.list_item_forecast,
-                            R.id.list_item_forecast_text_view,
-                            forecastList);
+                    new ArrayAdapter<>(getActivity(), // context
+                            R.layout.list_item_forecast, // layout to use
+                            R.id.list_item_forecast_text_view, // id of the text view on the list view
+                            // List data to use.
+                            forecastList
+                    );
 
             // Get a reference to the ListView and attach this adapter to it.
             ListView listView = (ListView) rootView.findViewById(R.id.list_view_forecast);
