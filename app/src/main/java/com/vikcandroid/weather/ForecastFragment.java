@@ -1,9 +1,11 @@
 package com.vikcandroid.weather;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -70,7 +72,11 @@ public class ForecastFragment extends Fragment {
         // you specify a parent activity in AndroidManifest.xml
         int id = item.getItemId();
         if (id == R.id.action_refresh) {
-            new FetchWeatherTask().execute("Nairobi");
+            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+            String location = preferences.getString(getString(R.string.pref_location_key), getString(R.string.pref_location_default));
+
+            new FetchWeatherTask().execute(location);
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }
