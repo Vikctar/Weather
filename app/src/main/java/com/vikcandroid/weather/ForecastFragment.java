@@ -31,8 +31,6 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 /**
  * A placeholder fragment containing a simple view
@@ -41,13 +39,6 @@ public class ForecastFragment extends Fragment {
 
     // Adapter
     ArrayAdapter<String> forecastAdapter;
-
-    // String array to hold dummy forecast
-    String[] forecastArray = {"Today - Sunny - 88/63", "Tomorrow - Foggy - 70/46", "Weds - Cloudy - 72/46",
-            "Thurs - Rainy - 64/51", "Fri - Foggy - 70/46", "Sat - Sunny - 76/68"};
-
-    // List to hold the strings
-    List<String> forecastList = new ArrayList<>(Arrays.asList(forecastArray));
 
     public ForecastFragment() {
     }
@@ -72,10 +63,7 @@ public class ForecastFragment extends Fragment {
         // you specify a parent activity in AndroidManifest.xml
         int id = item.getItemId();
         if (id == R.id.action_refresh) {
-            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-            String location = preferences.getString(getString(R.string.pref_location_key), getString(R.string.pref_location_default));
-
-            new FetchWeatherTask().execute(location);
+            updateWeather();
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -104,7 +92,6 @@ public class ForecastFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
-        // Now that we have some data, create an {@link ArrayAdapter}
         // The {@link ArrayAdapter} will take data from a source and use it to populate
         // the ListView it's attached to.
         forecastAdapter =
@@ -112,7 +99,7 @@ public class ForecastFragment extends Fragment {
                         R.layout.list_item_forecast, // layout to use
                         R.id.list_item_forecast_text_view, // id of the text view on the list view
                         // List data to use.
-                        forecastList
+                        new ArrayList<String>()
                 );
 
         // Get a reference to the ListView and attach this adapter to it.
@@ -130,6 +117,19 @@ public class ForecastFragment extends Fragment {
             }
         });
         return rootView;
+    }
+
+    private void updateWeather() {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        String location = preferences.getString(getString(R.string.pref_location_key), getString(R.string.pref_location_default));
+
+        new FetchWeatherTask().execute(location);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        updateWeather();
     }
 
     public class FetchWeatherTask extends AsyncTask<String, Void, String[]> {
