@@ -16,6 +16,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.v(LOG_TAG, "in onCreate");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         if (savedInstanceState == null) {
@@ -66,5 +67,50 @@ public class MainActivity extends AppCompatActivity {
         } else {
             Log.d(LOG_TAG, "Couldn't call " + location + ", no receiving apps installed");
         }
+    }
+
+    /**
+     * The activity is about to become visible
+     */
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Log.d(LOG_TAG, "in onStart");
+    }
+
+    /**
+     * The activity has become visible (it is now "resumed")
+     */
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.d(LOG_TAG, "in onResume");
+    }
+
+    /**
+     * Another activity is taking focus (this activity is about to be paused)
+     */
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Log.d(LOG_TAG, "in onPause");
+    }
+
+    /**
+     * The activity is no longer visible (it is now stopped)
+     */
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Log.d(LOG_TAG, "in onStop");
+    }
+
+    /**
+     * The activity is about to be destroyed.
+     */
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Log.d(LOG_TAG, "in onDestroy");
     }
 }
